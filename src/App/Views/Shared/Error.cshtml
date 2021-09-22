@@ -1,0 +1,13 @@
+﻿@model App.Error
+@{
+    ViewData["Title"] = "Erro";
+}
+
+<h2 class="text-danger">Ops! ocorreu um erro ao processar essa requisição, tente novamente mais tarde ou contate o administrador do sistema :D</h2>
+
+@if (Model.ShowRequestId)
+{
+    <p>
+        <strong>Request ID:</strong> <code>@Model.RequestId</code>
+    </p>
+}
