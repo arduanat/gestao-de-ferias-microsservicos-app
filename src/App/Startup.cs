@@ -1,12 +1,12 @@
+using App.Middlewares;
 using App.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Sentry.AspNetCore;
 
-namespace Aplicacao
+namespace App
 {
     public class Startup
     {
@@ -24,6 +24,7 @@ namespace Aplicacao
             services.AddScoped<ColaboradorService>();
             services.AddScoped<FeriasService>();
             services.AddScoped<HomologacaoDeFeriasService>();
+            services.AddScoped<LogService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -39,14 +40,16 @@ namespace Aplicacao
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
             app.UseHttpsRedirection();
+
             app.UseStaticFiles();
 
             app.UseRouting();
 
             app.UseAuthorization();
 
-            app.UseSentryTracing();
+            app.UsarCronometro();
 
             app.UseEndpoints(endpoints =>
             {
