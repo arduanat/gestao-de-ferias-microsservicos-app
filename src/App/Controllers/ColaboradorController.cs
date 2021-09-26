@@ -18,10 +18,17 @@ namespace App.Controllers
             return View(colaboradores);
         }
 
-        public async Task<IActionResult> Criar(int quantidade = 0)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Criar(int quantidade)
         {
-            await colaboradorService.Criar(quantidade);
-            return RedirectToAction(nameof(Index));
+            if (quantidade > 0)
+            {
+                await colaboradorService.Criar(quantidade);
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View();
         }
     }
 }
