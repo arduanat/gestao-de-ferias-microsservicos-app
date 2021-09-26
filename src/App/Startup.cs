@@ -23,8 +23,7 @@ namespace App
             services.AddControllersWithViews();
             services.AddScoped<ColaboradorService>();
             services.AddScoped<FeriasService>();
-            services.AddScoped<HomologacaoDeFeriasService>();
-            services.AddScoped<LogService>();
+            services.AddSingleton<LogService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

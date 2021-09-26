@@ -8,30 +8,26 @@ namespace App.Services
 {
     public class ColaboradorService : ConsumirApi
     {
-        private readonly Uri uri = new Uri("https://gestao-de-ferias-api-colaborador.azurewebsites.net/colaborador");
-        private readonly string rota = "/colaborador";
+        private readonly Uri uri = new Uri("https://gestao-de-ferias-api-colaborador.azurewebsites.net/Colaborador");
 
-        public async Task<List<ColaboradorViewModel>> Buscar(int id = 0)
+        public async Task<List<Colaborador>> Buscar()
         {
-            var colaboradores = await Buscar<List<ColaboradorViewModel>>(uri, $"{rota}/{id}", RestSharp.Method.GET);
+            var rota = "/ObterColaboradores";
+            var colaboradores = await Buscar<List<Colaborador>>(uri, rota, RestSharp.Method.GET);
             return colaboradores;
         }
 
-        public async Task<Response> Criar(ColaboradorViewModel colaborador)
+        public async Task<Response> Criar(int quantidade)
         {
-            var resposta = await Enviar<Response>(uri, rota, RestSharp.Method.POST, colaborador);
+            var rota = "/CriarColaboradores";
+            var resposta = await Enviar<Response>(uri, rota, RestSharp.Method.POST, quantidade);
             return resposta;
         }
-        
-        public async Task<Response> Editar(ColaboradorViewModel colaborador)
+           
+        public async Task<Response> LimparBanco()
         {
-            var resposta = await Enviar<Response>(uri, rota, RestSharp.Method.PUT, colaborador);
-            return resposta;
-        }
-        
-        public async Task<Response> Deletar(int id)
-        {
-            var resposta = await Enviar<Response>(uri, rota, RestSharp.Method.DELETE, id);
+            var rota = "/LimparBanco";
+            var resposta = await Enviar<Response>(uri, rota, RestSharp.Method.DELETE, null);
             return resposta;
         }
     }

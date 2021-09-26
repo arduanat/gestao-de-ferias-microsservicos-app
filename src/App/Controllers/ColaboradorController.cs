@@ -1,15 +1,12 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using App.Models;
+﻿using System.Threading.Tasks;
 using App.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace App.Controllers
 {
     public class ColaboradorController : Controller
     {
         private readonly ColaboradorService colaboradorService;
-
         public ColaboradorController(ColaboradorService colaboradorService)
         {
             this.colaboradorService = colaboradorService;
@@ -17,56 +14,13 @@ namespace App.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var colaboradores = await colaboradorService.Buscar(0);
+            var colaboradores = await colaboradorService.Buscar();
             return View(colaboradores);
         }
 
-        public IActionResult Criar()
+        public async Task<IActionResult> Criar(int quantidade = 0)
         {
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Criar(ColaboradorViewModel colaborador)
-        {
-            if (ModelState.IsValid)
-            {
-                await colaboradorService.Criar(colaborador);
-                return RedirectToAction(nameof(Index));
-            }
-            return View(colaborador);
-        }
-
-        public async Task<IActionResult> Editar(int id)
-        {
-            if (id == 0)
-                return NotFound();
-
-            var colaborador = await colaboradorService.Buscar(id);
-
-            return View(colaborador.First());
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Editar(ColaboradorViewModel colaborador)
-        {
-            if (ModelState.IsValid)
-            {
-                await colaboradorService.Editar(colaborador);
-                return RedirectToAction(nameof(Index));
-            }
-
-            return View(colaborador);
-        }
-
-        public async Task<IActionResult> Deletar(int id)
-        {
-            if (id == 0)
-                return NotFound();
-
-            await colaboradorService.Deletar(id);
+            await colaboradorService.Criar(quantidade);
             return RedirectToAction(nameof(Index));
         }
     }

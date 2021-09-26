@@ -8,20 +8,33 @@ namespace App.Services
 {
     public class FeriasService : ConsumirApi
     {
-        private readonly Uri uri = new Uri("https://gestao-de-ferias-api-ferias.azurewebsites.net");
-        private readonly string rota = "/ferias";
+        private readonly Uri uri = new Uri("https://gestao-de-ferias-api-ferias.azurewebsites.net/Ferias");
 
-        public async Task<List<FeriasViewModel>> Buscar(int colaboradorId = 0)
+        public async Task<List<Ferias>> Buscar()
         {
-            
-            var ferias = await Buscar<List<FeriasViewModel>>(uri, $"{rota}/{colaboradorId}", RestSharp.Method.GET);
+            var rota = "/ObterFerias";
+            var ferias = await Buscar<List<Ferias>>(uri, rota, RestSharp.Method.GET);
             return ferias;
         }
 
-        public async Task<Response> Criar(FeriasViewModel ferias)
+        public async Task<Response> MarcarFerias(List<PeriodoDeFerias> periodosDeFerias)
         {
-            var resposta = await Enviar<Response>(uri, rota, RestSharp.Method.POST, ferias);
+            var rota = "/MarcarFerias";
+            var resposta = await Enviar<Response>(uri, rota, RestSharp.Method.POST, periodosDeFerias);
             return resposta;
+        }
+
+        public async Task<Response> AprovarFerias()
+        {
+            var rota = "/AprovarFerias";
+            var resposta = await Enviar<Response>(uri, rota, RestSharp.Method.POST, null);
+            return resposta;
+        }
+
+        public async Task LimparBanco()
+        {
+            var rota = "/LimparBanco";
+            await Enviar<Response>(uri, rota, RestSharp.Method.DELETE, null);
         }
     }
 }

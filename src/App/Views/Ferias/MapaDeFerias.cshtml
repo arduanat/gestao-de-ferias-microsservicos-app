@@ -1,4 +1,6 @@
-﻿@model IEnumerable<App.Models.FeriasViewModel>
+﻿@model IEnumerable<App.Models.Ferias>
+
+@using  App.Models.ValueObjects.Enums;
 
 @{
     var ano = Model.Any(x => x.PeriodosDeFerias.Any()) ? Model.First().PeriodosDeFerias.First().DataInicial.Year : DateTime.Now.Year + 1;
@@ -7,9 +9,6 @@
 
 <h1 class="my-4">@ViewData["Title"]</h1>
 
-<a href="#" data-bs-toggle="modal" data-bs-target="#homologar-multiplas-ferias" class="mb-3">
-    <em class="mdi mdi-check"></em> Homologar todas as férias
-</a>
 <div class="h-75">
     @if (Model.Any())
     {
@@ -60,13 +59,13 @@
             <tbody class="scroller">
                 @foreach (var item in Model)
                 {
-                    var corDeFundo = item.Homologacao?.SituacaoDasFerias == "Deferida" ? "bg-success" :
-                                     item.Homologacao?.SituacaoDasFerias == "Indeferida" ? "bg-danger" : "bg-primary";
-
+                    var corDeFundo = item.Homologacao?.SituacaoDasFerias == SituacaoDasFerias.Aprovada ? "bg-success" :
+                                     item.Homologacao?.SituacaoDasFerias == SituacaoDasFerias.Reprovada ? "bg-danger" :
+                                     "bg-primary";
                     <tr class="text-center">
                         <td class="text-start">
-                            <small class="font-10">@Html.DisplayFor(modelItem => item.Colaborador.Matricula)</small><br />
-                            <small>@Html.DisplayFor(modelItem => item.Colaborador.Nome)</small>
+                            <small>@Html.DisplayFor(modelItem => item.Colaborador.Matricula)</small><br />
+                            <h6>@Html.DisplayFor(modelItem => item.Colaborador.Nome)</h6>
                         </td>
                         <td>
                             @{
@@ -181,45 +180,14 @@
             </tbody>
         </table>
     }
-</div>
-
-@section modals{
-    <div id="homologar-multiplas-ferias" class="modal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Homologar multiplas férias</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    else
+    {
+        <div class="card h-75">
+            <div class="card-body scroller">
+                <div class="text-center">
+                    <h6><em class="mdi mdi-alert"></em> Não há registros!</h6>
                 </div>
-                <form asp-action="HomologarMultiplasFerias" asp-controller="Ferias">
-                    <div class="modal-body">
-                        <div id="form-periodos">
-                            <div class="mb-3">
-                                <div id="idsDosColaboradores" hidden>
-
-                                    @{
-                                        var contador = 0;
-                                        foreach (var ferias in Model)
-                                        {
-                                            <input hidden value="@ferias.Id" name="feriasIds[@contador]" />
-                                            contador++;
-                                        }
-                                    }
-                                </div>
-                                <label class="form-label">Informe a situação</label>
-                                <select class="form-control" name="situacao">
-                                    <option value="Deferida">Deferir</option>
-                                    <option value="Indeferida">Indeferir</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><em class="mdi mdi-close"></em> Cancelar</button>
-                        <button type="submit" class="btn btn-primary"><em class="mdi mdi-send"></em> Enviar</button>
-                    </div>
-                </form>
             </div>
         </div>
-    </div>
-}
+    }
+</div>
