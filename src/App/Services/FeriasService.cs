@@ -8,7 +8,7 @@ namespace App.Services
 {
     public class FeriasService : ConsumirApi
     {
-        private readonly Uri uri = new Uri("https://api-gestao-de-ferias-ferias.azurewebsites.net/");
+        private readonly Uri uri = new Uri("https://api-gestao-de-ferias-ferias.azurewebsites.net/Ferias");
 
         public async Task<List<Ferias>> Buscar()
         {
